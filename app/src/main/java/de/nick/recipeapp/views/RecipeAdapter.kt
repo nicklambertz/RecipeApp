@@ -1,5 +1,6 @@
 package de.nick.recipeapp.views
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,15 @@ class RecipeAdapter(private val recipes: List<Recipe>) : RecyclerView.Adapter<Re
             crossfade(true)
             placeholder(R.drawable.placeholder_image)
             error(R.drawable.error_image)
+        }
+        holder.itemView.setOnClickListener {
+            val context = holder.itemView.context
+            val intent = Intent(context, RecipeDetailActivity::class.java).apply {
+                putExtra("title", recipe.name)
+                putExtra("description", recipe.description)
+                putExtra("imageUrl", recipe.imageUrl)
+            }
+            context.startActivity(intent)
         }
     }
 
