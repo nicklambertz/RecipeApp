@@ -16,7 +16,6 @@ class RecipeAdapter(private val recipes: List<Recipe>) : RecyclerView.Adapter<Re
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val image: ImageView = view.findViewById(R.id.imageViewRecipe)
         val name: TextView = view.findViewById(R.id.textViewRecipeName)
-        val description: TextView = view.findViewById(R.id.textViewRecipeDescription)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,18 +27,27 @@ class RecipeAdapter(private val recipes: List<Recipe>) : RecyclerView.Adapter<Re
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val recipe = recipes[position]
         holder.name.text = recipe.name
-        holder.description.text = recipe.description
+        // Load the recipe image with fallback
         holder.image.load(recipe.imageUrl) {
             crossfade(true)
             placeholder(R.drawable.placeholder_image)
             error(R.drawable.error_image)
         }
+
         holder.itemView.setOnClickListener {
             val context = holder.itemView.context
+
+            // Format ingredients into text for detail screen
+            val ingredientsText = recipe.ingredients.joinToString("\n") {
+                "- ${it.first} ${it.second}"
+            }
+
+            // Open detail activity for clicked recipe
             val intent = Intent(context, RecipeDetailActivity::class.java).apply {
                 putExtra("title", recipe.name)
                 putExtra("description", recipe.description)
                 putExtra("imageUrl", recipe.imageUrl)
+                putExtra("ingredients", ingredientsText)
             }
             context.startActivity(intent)
         }

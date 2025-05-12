@@ -13,13 +13,18 @@ class RecipeDetailActivity : BaseActivity() {
 
         val imageView = findViewById<ImageView>(R.id.detailImage)
         val titleView = findViewById<TextView>(R.id.detailTitle)
+        val ingredientsView = findViewById<TextView>(R.id.detailIngredients)
+        val ingredients = intent.getStringExtra("ingredients") ?: ""
         val descriptionView = findViewById<TextView>(R.id.detailDescription)
 
+        // Load values from intent
         val title = intent.getStringExtra("title")
         val description = intent.getStringExtra("description")
         val imageUrl = intent.getStringExtra("imageUrl")
 
+        // Display recipe data
         titleView.text = title
+        ingredientsView.text = ingredients
         descriptionView.text = description
         imageView.load(imageUrl) {
             placeholder(R.drawable.placeholder_image)

@@ -9,6 +9,7 @@ import de.nick.recipeapp.R
 
 open class BaseActivity : AppCompatActivity() {
 
+    // Use a custom layout that includes a toolbar and the main content area
     fun setContentWithBaseLayout(layoutResId: Int) {
         super.setContentView(R.layout.activity_base)
 
@@ -17,18 +18,22 @@ open class BaseActivity : AppCompatActivity() {
         supportActionBar?.title = "Rezepte-App"
         supportActionBar?.setDisplayHomeAsUpEnabled(shouldShowBackButton())
 
+        // Add the actual content below the toolbar
         val baseContainer = findViewById<LinearLayout>(R.id.baseContainer)
         val contentView = LayoutInflater.from(this).inflate(layoutResId, baseContainer, false)
         baseContainer.addView(contentView)
     }
 
+    // Decide if the screen should show a back button
     open fun shouldShowBackButton(): Boolean = false
 
+    // Handle toolbar back button
     override fun onSupportNavigateUp(): Boolean {
         onBackPressedDispatcher.onBackPressed()
         return true
     }
 
+    // Override to make sure the base layout is used
     override fun setContentView(layoutResID: Int) {
         setContentWithBaseLayout(layoutResID)
     }
