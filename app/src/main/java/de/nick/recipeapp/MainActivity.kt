@@ -19,8 +19,8 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentWithBaseLayout(R.layout.activity_main)
 
-        // Button to navigate to the full local recipe list
-        val btnShowRecipes = findViewById<Button>(R.id.btnShowRecipes)
+        // Button to show favorite recipes
+        val btnShowFavorites = findViewById<Button>(R.id.btnShowFavorites)
         // Button to show a random recipe fetched from the API
         val btnShowRandom = findViewById<Button>(R.id.btnShowRandom)
 
@@ -29,9 +29,11 @@ class MainActivity : BaseActivity() {
         // Button to submit search request
         val btnSearch = findViewById<Button>(R.id.btnSearch)
 
-        btnShowRecipes.setOnClickListener {
-            // Opens the list activity with locally stored or fetched recipes from the API
-            startActivity(Intent(this, RecipeListActivity::class.java))
+        btnShowFavorites.setOnClickListener {
+            // Show favorite recipes
+            val intent = Intent(this, RecipeListActivity::class.java)
+            intent.putExtra("showFavorites", true)
+            startActivity(intent)
         }
 
         btnShowRandom.setOnClickListener {
@@ -50,6 +52,7 @@ class MainActivity : BaseActivity() {
 
                     // Open the detail screen for this recipe
                     val intent = Intent(this@MainActivity, RecipeDetailActivity::class.java).apply {
+                        putExtra("id", it.id)
                         putExtra("title", it.name)
                         putExtra("description", it.description)
                         putExtra("imageUrl", it.imageUrl)

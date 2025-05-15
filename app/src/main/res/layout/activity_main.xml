@@ -6,10 +6,11 @@
     android:layout_height="match_parent">
 
      <Button
-         android:id="@+id/btnShowRecipes"
+         android:id="@+id/btnShowFavorites"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
-         android:text="Alle Rezepte anzeigen (lokal)" />
+         android:text="Favoriten anzeigen"
+         android:layout_marginBottom="12dp" />
 
      <Button
          android:id="@+id/btnShowRandom"

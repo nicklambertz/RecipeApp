@@ -44,6 +44,7 @@ class RecipeAdapter(private val recipes: List<Recipe>) : RecyclerView.Adapter<Re
 
             // Open detail activity for clicked recipe
             val intent = Intent(context, RecipeDetailActivity::class.java).apply {
+                putExtra("id", recipe.id)
                 putExtra("title", recipe.name)
                 putExtra("description", recipe.description)
                 putExtra("imageUrl", recipe.imageUrl)

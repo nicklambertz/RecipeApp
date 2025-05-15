@@ -74,7 +74,7 @@ object MealApiService {
 
     // Convert JSON data to a Recipe object
     private fun jsonToRecipe(json: JSONObject): Recipe {
-        val id = json.optString("idMeal").toIntOrNull() ?: 0
+        val id = json.optString("idMeal") ?: ""
         val name = json.optString("strMeal") ?: "Unknown"
         val description = json.optString("strInstructions") ?: ""
         val imageUrl = json.optString("strMealThumb") ?: ""

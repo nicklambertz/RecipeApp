@@ -7,7 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import de.nick.recipeapp.R
-import de.nick.recipeapp.data.RecipeRepository
+import de.nick.recipeapp.data.FavoritesRepository
 import de.nick.recipeapp.data.api.MealApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,6 +23,7 @@ class RecipeListActivity : BaseActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val query = intent.getStringExtra("searchQuery")
+        val showFavorites = intent.getBooleanExtra("showFavorites", false)
 
         if (!query.isNullOrBlank()) {
             // If search query exists, load search results with coroutine
@@ -40,11 +41,31 @@ class RecipeListActivity : BaseActivity() {
                     noResultsText.visibility = View.VISIBLE
                 }
             }
+        } else if (showFavorites) {
+            // Load saved recipes if favorites button was clicked
+            FavoritesRepository.init(this)
+            val favorites = FavoritesRepository.getAllFavorites()
+            recyclerView.adapter = RecipeAdapter(favorites)
+            noResultsText.visibility = if (favorites.isEmpty()) View.VISIBLE else View.GONE
         } else {
-            // If no query given, show all local recipes
-            val recipes = RecipeRepository.getRecipes()
-            recyclerView.adapter = RecipeAdapter(recipes)
-            noResultsText.visibility = if (recipes.isEmpty()) View.VISIBLE else View.GONE
+            // Show empty list if favorites are empty
+            recyclerView.adapter = RecipeAdapter(emptyList())
+            noResultsText.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onResume() {
+        // Reload list of favorites when coming back from detail screen
+        super.onResume()
+
+        val showFavorites = intent.getBooleanExtra("showFavorites", false)
+        if (showFavorites) {
+            val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewRecipes)
+            val noResultsText = findViewById<TextView>(R.id.textNoResults)
+            val updatedFavorites = FavoritesRepository.getAllFavorites()
+
+            recyclerView.adapter = RecipeAdapter(updatedFavorites)
+            noResultsText.visibility = if (updatedFavorites.isEmpty()) View.VISIBLE else View.GONE
         }
     }
 
