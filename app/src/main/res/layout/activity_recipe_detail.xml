@@ -1,4 +1,5 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="none">
@@ -13,37 +14,61 @@
             android:id="@+id/detailImage"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:layout_marginBottom="12dp"
+            android:clipToOutline="true"
+            android:backgroundTint="@color/divider" />
 
         <ImageButton
             android:id="@+id/btnFavorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="end"
+            android:layout_marginBottom="8dp"
             android:src="@drawable/ic_star_border"
             android:background="@android:color/transparent"
-            android:contentDescription="Favorit"
-            android:layout_margin="8dp"/>
+            android:contentDescription="Favorit" />
 
         <TextView
             android:id="@+id/detailTitle"
             android:textSize="24sp"
+            android:textColor="@color/text_primary"
             android:textStyle="bold"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ingredients"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
 
         <TextView
             android:id="@+id/detailIngredients"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
+            android:textColor="@color/text_secondary"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Directions"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
 
         <TextView
             android:id="@+id/detailDescription"
-            android:textSize="16sp"
-            android:layout_marginTop="8dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_secondary"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp" />
     </LinearLayout>
 </ScrollView>

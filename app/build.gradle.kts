@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.recyclerview)
     implementation(libs.gson)
+    implementation(libs.androidx.cardview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

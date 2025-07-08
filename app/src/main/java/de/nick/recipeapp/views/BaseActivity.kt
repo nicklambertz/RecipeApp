@@ -15,7 +15,7 @@ open class BaseActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.appToolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "Rezepte-App"
+        supportActionBar?.title = "Your recipe app"
         supportActionBar?.setDisplayHomeAsUpEnabled(shouldShowBackButton())
 
         // Add the actual content below the toolbar

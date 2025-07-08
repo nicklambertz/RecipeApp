@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -15,7 +15,8 @@
         android:id="@+id/textNoResults"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No recipes found."
+        android:text="Keine Rezepte gefunden."
+        android:textColor="@color/text_secondary"
         android:visibility="gone"
         android:layout_gravity="center"
         android:textSize="16sp"
