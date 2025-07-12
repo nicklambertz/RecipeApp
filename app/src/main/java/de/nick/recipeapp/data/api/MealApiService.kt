@@ -19,9 +19,33 @@ object MealApiService {
     }
 
     // Search for recipes that match the user's query
-    fun searchMeals(query: String): List<Recipe> {
+    fun searchMeals(query: String): List<Recipe>? {
         val urlString = "https://www.themealdb.com/api/json/v1/1/search.php?s=${query.trim()}"
-        return fetchMealList(urlString)
+
+
+        return try {
+            // Search with user query, return empty list if the query gets no results
+            val connection = URL(urlString).openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+            connection.connectTimeout = 3000
+            connection.readTimeout = 3000
+
+            val input = BufferedReader(InputStreamReader(connection.inputStream))
+            val response = input.readText()
+            input.close()
+
+            val json = JSONObject(response)
+            val mealsArray = json.optJSONArray("meals") ?: return emptyList()
+
+            List(mealsArray.length()) { i ->
+                val mealJson = mealsArray.getJSONObject(i)
+                jsonToRecipe(mealJson)
+            }
+        } catch (e: Exception) {
+            // Return error message when the API request does not work after 3 sec
+            Log.e(TAG, "Error during search: ${e.message}", e)
+            null
+        }
     }
 
     // Fetch a single recipe from the given API URL

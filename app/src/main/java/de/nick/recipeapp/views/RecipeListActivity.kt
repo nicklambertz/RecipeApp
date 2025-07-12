@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import de.nick.recipeapp.R
 import de.nick.recipeapp.data.FavoritesRepository
 import de.nick.recipeapp.data.api.MealApiService
+import de.nick.recipeapp.util.ErrorUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,32 +26,61 @@ class RecipeListActivity : BaseActivity() {
         val query = intent.getStringExtra("searchQuery")
         val showFavorites = intent.getBooleanExtra("showFavorites", false)
 
-        if (!query.isNullOrBlank()) {
-            // If search query exists, load search results with coroutine
-            lifecycleScope.launch {
-                val results = withContext(Dispatchers.IO) {
-                    MealApiService.searchMeals(query)
-                }
+        when {
+            !query.isNullOrBlank() -> {
+                // If search query exists, load search results with coroutine
+                lifecycleScope.launch {
+                    try {
+                        val results = withContext(Dispatchers.IO) {
+                            MealApiService.searchMeals(query)
+                        }
 
-                // Show results if found
-                if (results.isNotEmpty()) {
-                    recyclerView.adapter = RecipeAdapter(results)
-                    noResultsText.visibility = View.GONE
-                } else {
-                    // Show "no results" text
-                    noResultsText.visibility = View.VISIBLE
+                        when {
+                            results == null -> {
+                                // Show message for API error when results are null
+                                ErrorUtils.handleApiError(
+                                    this@RecipeListActivity,
+                                    Exception("API offline")
+                                )
+                                recyclerView.visibility = View.GONE
+                            }
+
+                            results.isEmpty() -> {
+                                // Show no results message when results are empty
+                                ErrorUtils.showToast(
+                                    this@RecipeListActivity,
+                                    getString(R.string.error_no_results)
+                                )
+                                recyclerView.visibility = View.GONE
+                            }
+
+                            else -> {
+                                // Show results if found
+                                recyclerView.adapter = RecipeAdapter(results)
+                                recyclerView.visibility = View.VISIBLE
+                            }
+                        }
+                    } catch (e: Exception) {
+                        // Catch: Show message for API error
+                        ErrorUtils.handleApiError(this@RecipeListActivity, e)
+                        recyclerView.visibility = View.GONE
+                    }
                 }
             }
-        } else if (showFavorites) {
-            // Load saved recipes if favorites button was clicked
-            FavoritesRepository.init(this)
-            val favorites = FavoritesRepository.getAllFavorites()
-            recyclerView.adapter = RecipeAdapter(favorites)
-            noResultsText.visibility = if (favorites.isEmpty()) View.VISIBLE else View.GONE
-        } else {
-            // Show empty list if favorites are empty
-            recyclerView.adapter = RecipeAdapter(emptyList())
-            noResultsText.visibility = View.VISIBLE
+
+            showFavorites -> {
+                // Load saved recipes if favorites button was clicked
+                FavoritesRepository.init(this)
+                val favorites = FavoritesRepository.getAllFavorites()
+                recyclerView.adapter = RecipeAdapter(favorites)
+                noResultsText.visibility = if (favorites.isEmpty()) View.GONE else View.VISIBLE
+            }
+
+            else -> {
+                // Show empty list if favorites are empty
+                recyclerView.adapter = RecipeAdapter(emptyList())
+                recyclerView.visibility = View.GONE
+            }
         }
     }
 

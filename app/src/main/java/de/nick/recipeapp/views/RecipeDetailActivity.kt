@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import coil.load
 import de.nick.recipeapp.R
 import de.nick.recipeapp.data.FavoritesRepository
 import de.nick.recipeapp.data.Recipe
+import de.nick.recipeapp.util.ErrorUtils
 
 class RecipeDetailActivity : BaseActivity() {
     private lateinit var recipe: Recipe
@@ -53,23 +55,28 @@ class RecipeDetailActivity : BaseActivity() {
         updateStarIcon()
 
         starButton.setOnClickListener {
-            val recipe = Recipe(
-                id, title, description, imageUrl, ingredientsText
-                .split("\n")
-                .filter { it.startsWith("- ") }
-                .map {
-                    val parts = it.removePrefix("- ").split(" ", limit = 2)
-                    parts[0] to (parts.getOrNull(1) ?: "")
+            try {
+                val recipe = Recipe(
+                    id, title, description, imageUrl, ingredientsText
+                        .split("\n")
+                        .filter { it.startsWith("- ") }
+                        .map {
+                            val parts = it.removePrefix("- ").split(" ", limit = 2)
+                            parts[0] to (parts.getOrNull(1) ?: "")
+                        }
+                )
+
+                if (FavoritesRepository.isFavorite(id)) {
+                    FavoritesRepository.removeFromFavorites(id)
+                } else {
+                    FavoritesRepository.addToFavorites(recipe)
                 }
-            )
 
-            if (FavoritesRepository.isFavorite(id)) {
-                FavoritesRepository.removeFromFavorites(id)
-            } else {
-                FavoritesRepository.addToFavorites(recipe)
+                updateStarIcon()
+
+            } catch (e: Exception) {
+                ErrorUtils.handleFavoriteError(this, e)
             }
-
-            updateStarIcon()
         }
     }
 

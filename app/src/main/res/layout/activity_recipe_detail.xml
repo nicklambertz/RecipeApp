@@ -16,8 +16,8 @@
             android:layout_height="200dp"
             android:scaleType="centerCrop"
             android:layout_marginBottom="12dp"
-            android:clipToOutline="true"
-            android:backgroundTint="@color/divider" />
+            android:backgroundTint="@color/divider"
+            android:contentDescription="@string/detail_meal_preview" />
 
         <ImageButton
             android:id="@+id/btnFavorite"
@@ -27,7 +27,7 @@
             android:layout_marginBottom="8dp"
             android:src="@drawable/ic_star_border"
             android:background="@android:color/transparent"
-            android:contentDescription="Favorit" />
+            android:contentDescription="@string/detail_favorite" />
 
         <TextView
             android:id="@+id/detailTitle"
@@ -41,7 +41,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ingredients"
+            android:text="@string/detail_ingredients"
             android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -57,7 +57,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Directions"
+            android:text="@string/detail_directions"
             android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:textStyle="bold"

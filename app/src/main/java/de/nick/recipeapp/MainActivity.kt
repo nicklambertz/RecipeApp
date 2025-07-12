@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
 import de.nick.recipeapp.data.api.MealApiService
+import de.nick.recipeapp.util.ErrorUtils
 import de.nick.recipeapp.views.BaseActivity
 import de.nick.recipeapp.views.RecipeDetailActivity
 import de.nick.recipeapp.views.RecipeListActivity
@@ -43,35 +44,59 @@ class MainActivity : BaseActivity() {
                     MealApiService.getRandomMeal()
                 }
 
-                // Only continue if recipe was fetched
-                recipe?.let {
-                    // Combine ingredients into a single string
-                    val ingredientsText = it.ingredients.joinToString("\n") { pair ->
-                        "- ${pair.first} ${pair.second}"
-                    }
+                if (recipe != null) {
+                    // Only continue if recipe was fetched
+                    recipe?.let {
+                        // Combine ingredients into a single string
+                        val ingredientsText = it.ingredients.joinToString("\n") { pair ->
+                            "- ${pair.first} ${pair.second}"
+                        }
 
-                    // Open the detail screen for this recipe
-                    val intent = Intent(this@MainActivity, RecipeDetailActivity::class.java).apply {
-                        putExtra("id", it.id)
-                        putExtra("title", it.name)
-                        putExtra("description", it.description)
-                        putExtra("imageUrl", it.imageUrl)
-                        putExtra("ingredients", ingredientsText)
+                        // Open the detail screen for this recipe
+                        val intent = Intent(this@MainActivity, RecipeDetailActivity::class.java).apply {
+                            putExtra("id", it.id)
+                            putExtra("title", it.name)
+                            putExtra("description", it.description)
+                            putExtra("imageUrl", it.imageUrl)
+                            putExtra("ingredients", ingredientsText)
+                        }
+                        startActivity(intent)
                     }
-                    startActivity(intent)
+                } else {
+                    ErrorUtils.handleApiError(this@MainActivity, Exception("No connection"))
                 }
             }
         }
 
         btnSearch.setOnClickListener {
-            val query = searchInput.text.toString()
+            val query = searchInput.text.toString().trim()
 
             // Only search if the input is not empty
             if (query.isNotBlank()) {
-                // Start recipe list with search query
-                val intent = Intent(this, RecipeListActivity::class.java)
-                intent.putExtra("searchQuery", query)
-                startActivity(intent)
+                lifecycleScope.launch {
+                    val results = withContext(Dispatchers.IO) {
+                        MealApiService.searchMeals(query)
+                    }
+
+                    when {
+                        results == null -> {
+                            // Show message for API error when results are null
+                            ErrorUtils.handleApiError(this@MainActivity, Exception("API offline"))
+                        }
+
+                        results.isEmpty() -> {
+                            // Show no results message when results are empty
+                            ErrorUtils.showToast(this@MainActivity, getString(R.string.error_no_results))
+                        }
+
+                        else -> {
+                            // Start recipe list with search query
+                            val intent = Intent(this@MainActivity, RecipeListActivity::class.java)
+                            intent.putExtra("searchQuery", query)
+                            startActivity(intent)
+                        }
+                    }
+                }
             }
         }
     }
