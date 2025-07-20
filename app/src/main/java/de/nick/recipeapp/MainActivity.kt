@@ -1,10 +1,12 @@
 package de.nick.recipeapp
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
+import de.nick.recipeapp.data.FavoritesRepository
 import de.nick.recipeapp.data.api.MealApiService
 import de.nick.recipeapp.util.ErrorUtils
 import de.nick.recipeapp.views.BaseActivity
@@ -41,29 +43,31 @@ class MainActivity : BaseActivity() {
             // Use coroutine to get a random recipe from the API in the background
             lifecycleScope.launch {
                 val recipe = withContext(Dispatchers.IO) {
-                    MealApiService.getRandomMeal()
+                    try {
+                        MealApiService.getRandomMeal()
+                    } catch (e: Exception) {
+                        ErrorUtils.handleApiError(this@MainActivity, e)
+                        null
+                    }
                 }
 
                 if (recipe != null) {
-                    // Only continue if recipe was fetched
-                    recipe?.let {
-                        // Combine ingredients into a single string
-                        val ingredientsText = it.ingredients.joinToString("\n") { pair ->
-                            "- ${pair.first} ${pair.second}"
-                        }
-
-                        // Open the detail screen for this recipe
-                        val intent = Intent(this@MainActivity, RecipeDetailActivity::class.java).apply {
-                            putExtra("id", it.id)
-                            putExtra("title", it.name)
-                            putExtra("description", it.description)
-                            putExtra("imageUrl", it.imageUrl)
-                            putExtra("ingredients", ingredientsText)
-                        }
-                        startActivity(intent)
+                    // Continue only if recipe was fetched
+                    val ingredientsText = recipe.ingredients.joinToString("\n") {
+                        "- ${it.amount} ${it.name}"
                     }
+
+                    // Open the detail screen for this recipe
+                    val intent = Intent(this@MainActivity, RecipeDetailActivity::class.java).apply {
+                        putExtra("id", recipe.id)
+                        putExtra("title", recipe.name)
+                        putExtra("description", recipe.description)
+                        putExtra("imageUrl", recipe.imageUrl)
+                        putExtra("ingredients", ingredientsText)
+                    }
+                    startActivity(intent)
                 } else {
-                    ErrorUtils.handleApiError(this@MainActivity, Exception("No connection"))
+                    ErrorUtils.handleApiError(this@MainActivity, Exception("No random recipe found"))
                 }
             }
         }

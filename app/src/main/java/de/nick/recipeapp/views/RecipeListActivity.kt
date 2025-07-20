@@ -56,7 +56,7 @@ class RecipeListActivity : BaseActivity() {
 
                             else -> {
                                 // Show results if found
-                                recyclerView.adapter = RecipeAdapter(results)
+                                recyclerView.adapter = RecipeAdapter(results ?: emptyList())
                                 recyclerView.visibility = View.VISIBLE
                             }
                         }
@@ -73,7 +73,7 @@ class RecipeListActivity : BaseActivity() {
                 FavoritesRepository.init(this)
                 val favorites = FavoritesRepository.getAllFavorites()
                 recyclerView.adapter = RecipeAdapter(favorites)
-                noResultsText.visibility = if (favorites.isEmpty()) View.GONE else View.VISIBLE
+                noResultsText.visibility = if (favorites.isEmpty()) View.VISIBLE else View.GONE
             }
 
             else -> {

@@ -39,7 +39,7 @@ class RecipeAdapter(private val recipes: List<Recipe>) : RecyclerView.Adapter<Re
 
             // Format ingredients into text for detail screen
             val ingredientsText = recipe.ingredients.joinToString("\n") {
-                "- ${it.first} ${it.second}"
+                "- ${it.amount} ${it.name}"
             }
 
             // Open detail activity for clicked recipe

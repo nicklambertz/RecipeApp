@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import coil.load
 import de.nick.recipeapp.R
 import de.nick.recipeapp.data.FavoritesRepository
 import de.nick.recipeapp.data.Recipe
+import de.nick.recipeapp.data.Ingredient
 import de.nick.recipeapp.util.ErrorUtils
 
 class RecipeDetailActivity : BaseActivity() {
@@ -34,6 +34,12 @@ class RecipeDetailActivity : BaseActivity() {
         val imageUrl = intent.getStringExtra("imageUrl") ?: ""
         val ingredientsText = intent.getStringExtra("ingredients") ?: ""
 
+        if (id.isEmpty() || title.isEmpty()) {
+            ErrorUtils.handleApiError(this, Exception("Invalid recipe data"))
+            finish()
+            return
+        }
+
         // Display recipe data
         titleView.text = title
         ingredientsView.text = ingredientsText
@@ -57,12 +63,12 @@ class RecipeDetailActivity : BaseActivity() {
         starButton.setOnClickListener {
             try {
                 val recipe = Recipe(
-                    id, title, description, imageUrl, ingredientsText
-                        .split("\n")
+                    id, title, description, imageUrl,
+                    ingredientsText.split("\n")
                         .filter { it.startsWith("- ") }
                         .map {
                             val parts = it.removePrefix("- ").split(" ", limit = 2)
-                            parts[0] to (parts.getOrNull(1) ?: "")
+                            Ingredient(parts[0], parts.getOrNull(1) ?: "")
                         }
                 )
 
