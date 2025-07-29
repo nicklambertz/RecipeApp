@@ -1,10 +1,16 @@
 <resources>
-    <string name="app_name">Your Recipe App</string>
+    <string name="app_name">CookIt</string>
 
     <string name="main_show_favorites">Show favorites</string>
     <string name="main_show_random_recipe">Show random recipe</string>
     <string name="main_search_recipe">Search recipe</string>
     <string name="main_search">Search</string>
+    <string name="main_category_soup">"Soup</string>
+    <string name="main_category_beef">"Beef</string>
+    <string name="main_category_chicken">"Chicken</string>
+    <string name="main_category_vegan">"Vegan</string>
+    <string name="main_category_pasta">"Pasta</string>
+
 
     <string name="detail_meal_preview">Meal preview</string>
     <string name="detail_favorite">Favorite</string>

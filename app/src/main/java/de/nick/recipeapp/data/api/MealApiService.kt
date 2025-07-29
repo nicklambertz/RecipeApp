@@ -32,4 +32,15 @@ object MealApiService {
             null
         }
     }
+
+    // Search for recipes by categories
+    suspend fun searchCategory(category: String): List<Recipe>? {
+        return try {
+            val response = RetrofitClient.api.searchCategory(category)
+            response.meals?.mapNotNull { it.toRecipe() } ?: emptyList()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error for category $category: ${e.message}", e)
+            null
+        }
+    }
 }

@@ -103,6 +103,19 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
+
+        fun openCategory(category: String) {
+            val intent = Intent(this, RecipeListActivity::class.java)
+            intent.putExtra("category", category)
+            startActivity(intent)
+        }
+
+        // Buttons for categories
+        findViewById<Button>(R.id.btnCategorySoup).setOnClickListener { openCategory("Soup") }
+        findViewById<Button>(R.id.btnCategoryBeef).setOnClickListener { openCategory("Beef") }
+        findViewById<Button>(R.id.btnCategoryChicken).setOnClickListener { openCategory("Chicken") }
+        findViewById<Button>(R.id.btnCategoryVegan).setOnClickListener { openCategory("Vegan") }
+        findViewById<Button>(R.id.btnCategoryPasta).setOnClickListener { openCategory("Pasta") }
     }
 
     // This screen does not need a back button

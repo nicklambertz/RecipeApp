@@ -57,8 +57,79 @@
               android:textColor="@color/text_on_primary"
               android:elevation="2dp"
               android:padding="12dp"
+              android:layout_marginBottom="50dp"
               android:background="@drawable/bg_rounded_button"
               android:drawableStart="@drawable/ic_search"
+              android:drawablePadding="12dp" />
+
+          <Button
+              android:id="@+id/btnCategorySoup"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/main_category_soup"
+              android:backgroundTint="@color/colorAccent"
+              android:textColor="@color/text_on_primary"
+              android:elevation="2dp"
+              android:padding="12dp"
+              android:layout_marginBottom="20dp"
+              android:background="@drawable/bg_rounded_button"
+              android:drawableStart="@drawable/ic_soup"
+              android:drawablePadding="12dp" />
+
+          <Button
+              android:id="@+id/btnCategoryBeef"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/main_category_beef"
+              android:backgroundTint="@color/colorAccent"
+              android:textColor="@color/text_on_primary"
+              android:elevation="2dp"
+              android:padding="12dp"
+              android:layout_marginBottom="20dp"
+              android:background="@drawable/bg_rounded_button"
+              android:drawableStart="@drawable/ic_beef"
+              android:drawablePadding="12dp" />
+
+          <Button
+              android:id="@+id/btnCategoryChicken"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/main_category_chicken"
+              android:backgroundTint="@color/colorAccent"
+              android:textColor="@color/text_on_primary"
+              android:elevation="2dp"
+              android:padding="12dp"
+              android:layout_marginBottom="20dp"
+              android:background="@drawable/bg_rounded_button"
+              android:drawableStart="@drawable/ic_chicken"
+              android:drawablePadding="12dp" />
+
+          <Button
+              android:id="@+id/btnCategoryVegan"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/main_category_vegan"
+              android:backgroundTint="@color/colorAccent"
+              android:textColor="@color/text_on_primary"
+              android:elevation="2dp"
+              android:padding="12dp"
+              android:layout_marginBottom="20dp"
+              android:background="@drawable/bg_rounded_button"
+              android:drawableStart="@drawable/ic_vegan"
+              android:drawablePadding="12dp" />
+
+          <Button
+              android:id="@+id/btnCategoryPasta"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="@string/main_category_pasta"
+              android:backgroundTint="@color/colorAccent"
+              android:textColor="@color/text_on_primary"
+              android:elevation="2dp"
+              android:padding="12dp"
+              android:layout_marginBottom="20dp"
+              android:background="@drawable/bg_rounded_button"
+              android:drawableStart="@drawable/ic_pasta"
               android:drawablePadding="12dp" />
      </LinearLayout>
 </ScrollView>

@@ -26,6 +26,8 @@ class RecipeListActivity : BaseActivity() {
         val query = intent.getStringExtra("searchQuery")
         val showFavorites = intent.getBooleanExtra("showFavorites", false)
 
+        val category = intent.getStringExtra("category")
+
         when {
             !query.isNullOrBlank() -> {
                 // If search query exists, load search results with coroutine
@@ -80,6 +82,24 @@ class RecipeListActivity : BaseActivity() {
                 // Show empty list if favorites are empty
                 recyclerView.adapter = RecipeAdapter(emptyList())
                 recyclerView.visibility = View.GONE
+            }
+        }
+
+        if (!category.isNullOrBlank()) {
+            lifecycleScope.launch {
+                try {
+                    val results = withContext(Dispatchers.IO) {
+                        MealApiService.searchCategory(category)
+                    }
+                    if (results.isNullOrEmpty()) {
+                        ErrorUtils.showToast(this@RecipeListActivity, "No recipes in category $category")
+                    } else {
+                        recyclerView.adapter = RecipeAdapter(results)
+                        recyclerView.visibility = View.VISIBLE
+                    }
+                } catch (e: Exception) {
+                    ErrorUtils.handleApiError(this@RecipeListActivity, e)
+                }
             }
         }
     }

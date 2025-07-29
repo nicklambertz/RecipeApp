@@ -15,8 +15,14 @@ open class BaseActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.appToolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = getString(R.string.app_name)
-        supportActionBar?.setDisplayHomeAsUpEnabled(shouldShowBackButton())
+
+        supportActionBar?.apply {
+            setLogo(R.drawable.ic_logo)
+            title = getString(R.string.app_name)
+            setDisplayUseLogoEnabled(true)
+            setDisplayShowHomeEnabled(true)
+            setDisplayHomeAsUpEnabled(shouldShowBackButton())
+        }
 
         // Add the actual content below the toolbar
         val baseContainer = findViewById<LinearLayout>(R.id.baseContainer)
